@@ -1,43 +1,34 @@
 import axios from "axios";
-import { toast } from "react-toastify";
-import { refreshUser } from "../services/authentication";
+import { getAuthToken } from "../helpers/localstorage";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
-const axiosBaseInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-  withCredentials: true,
-  headers: { "Content-Type": "application/json" },
+console.log(BASE_URL);
+
+export const axiosBaseInstance = axios.create({
+  baseURL: BASE_URL,
 });
 
-//Request Interceptor
 axiosBaseInstance.interceptors.request.use(
-  (config) => {
-    if (config.data instanceof FormData) {
-      delete config.headers["Content-Type"]; // Let browser set it
+  function (config) {
+    const token = getAuthToken();
+    if (token) {
+      config.headers.Authorization = "Bearer " + token;
     }
     return config;
   },
-  (error) => Promise.reject(error)
-);
-
-//Response Interceptor
-axiosBaseInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const { response, config } = error;
-
-    if (response?.status === 401 && !config._retry) {
-      config._retry = true;
-      try {
-        await refreshUser();
-        return axiosBaseInstance(config);
-      } catch {
-        toast.warn("🚨 Unauthorized. Redirecting to login...");
-        window.location.href = "/login";
-      }
-    }
-
+  function (error) {
     return Promise.reject(error);
   }
 );
 
-export default axiosBaseInstance;
+axiosBaseInstance.interceptors.response.use(
+  function (response) {
+    if (!response.data.success) {
+      //   toast(response.data.message);
+    }
+    return response;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
