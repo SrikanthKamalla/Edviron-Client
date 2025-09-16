@@ -8,6 +8,7 @@ const initialState = {
     userId: "",
   },
   transactionsState: [],
+
 };
 
 export const fetchUserSignUp = createAsyncThunk(
@@ -49,6 +50,7 @@ const userSlice = createSlice({
     },
     setTransactionsState: (state, action) => {
       state.transactionsState = action.payload;
+
     },
   },
   extraReducers: (builder) => {
@@ -58,6 +60,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserSignUp.fulfilled, (state, action) => {
         const { name, email, _id } = action.payload.data.user;
+
         state.user = { name, email, userId: _id };
         state.loading = false;
       })
@@ -71,6 +74,7 @@ const userSlice = createSlice({
 
       .addCase(fetchUserLogin.fulfilled, (state, action) => {
         const { name, email, _id } = action.payload.data.user;
+
         state.user = { name, email, userId: _id };
         state.loading = false;
       })
@@ -82,4 +86,5 @@ const userSlice = createSlice({
 });
 
 export const { setUser, setTransactionsState } = userSlice.actions;
+
 export default userSlice.reducer;

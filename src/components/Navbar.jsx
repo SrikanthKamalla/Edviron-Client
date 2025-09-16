@@ -8,6 +8,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useState } from "react";
+
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
@@ -89,7 +90,6 @@ const Navbar = () => {
                 </Link>
               </div>
 
-              {/* User dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}

@@ -43,6 +43,7 @@ export const CardFooter = ({ children, className = "" }) => (
   </div>
 );
 
+
 export const Button = ({
   children,
   variant = "default",
@@ -87,12 +88,14 @@ export const Button = ({
   );
 };
 
+
 export const Textarea = ({ className = "", ...props }) => (
   <textarea
     className={`flex min-h-[80px] w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     {...props}
   />
 );
+
 
 export const Badge = ({ children, className = "" }) => (
   <span
@@ -156,6 +159,7 @@ export const SelectValue = ({ children, placeholder }) => (
 export const SelectContent = ({ children, open, setOpen, className = "" }) => {
   const ref = useRef();
 
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (ref.current && !ref.current.contains(event.target)) {
@@ -188,6 +192,7 @@ export const SelectItem = ({
   value: itemValue,
   children,
   onValueChange,
+
   className = "",
 }) => (
   <div
@@ -199,6 +204,7 @@ export const SelectItem = ({
     {children}
   </div>
 );
+
 
 export const Table = ({ children, className = "" }) => (
   <table className={`w-full border-collapse ${className}`}>{children}</table>
@@ -232,6 +238,7 @@ export const TableCell = ({ children, className = "", colSpan }) => (
   </td>
 );
 
+
 export const Alert = ({ children, className = "" }) => (
   <div
     className={`relative w-full rounded-lg border border-gray-200 dark:border-gray-700 p-4 ${className}`}
@@ -249,6 +256,7 @@ export const Dialog = ({ children }) => {
 };
 
 export const DialogTrigger = ({ children, ...props }) => {
+
   return React.cloneElement(children, props);
 };
 
@@ -280,3 +288,4 @@ export const DialogDescription = ({ children, className = "" }) => (
     {children}
   </p>
 );
+

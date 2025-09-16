@@ -12,9 +12,11 @@ import { createPayment } from "../services/payment";
 import { toast } from "react-toastify";
 import { getSchools } from "../services/auth";
 
+
 const CreatePayment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentResponse, setPaymentResponse] = useState(null);
+
   const [formData, setFormData] = useState({
     schoolId: "",
     amount: "",
@@ -48,6 +50,7 @@ const CreatePayment = () => {
     if (!formData.email) newErrors.email = "Student email is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+
   };
 
   const copyToClipboard = (text, label) => {
@@ -287,6 +290,7 @@ const CreatePayment = () => {
             <Plus className="h-4 w-4 mr-2" />
             Create Another Payment
           </button>
+
         </div>
       )}
     </div>

@@ -141,6 +141,7 @@ const Transactions = ({ school }) => {
           )}
         </tbody>
       </table>
+
     </div>
   );
 };

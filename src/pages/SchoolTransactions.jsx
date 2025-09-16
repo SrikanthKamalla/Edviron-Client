@@ -8,6 +8,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
 import { toast } from "react-toastify";
 import {
   Badge,
@@ -43,6 +44,7 @@ const Schools = () => {
       setSchools(data);
     } catch (error) {
       toast.error("Failed to load schools data", error.message);
+
     } finally {
       setIsLoading(false);
     }
@@ -83,6 +85,7 @@ const Schools = () => {
       {/* Schools Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {schools.map((school) => {
+
           return (
             <Card
               key={school._id}

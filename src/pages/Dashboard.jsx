@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+
 import {
   CreditCard,
   TrendingUp,
@@ -258,6 +259,7 @@ const SingleSelect = ({
 };
 
 const TransactionsDashboard = () => {
+
   const [stats, setStats] = useState({
     totalTransactions: 0,
     successfulTransactions: 0,
@@ -455,6 +457,7 @@ const TransactionsDashboard = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px] bg-gray-50">
         <div className="flex items-center space-x-2 text-gray-900">
+
           <RefreshCw className="h-6 w-6 animate-spin" />
           <span>Loading dashboard...</span>
         </div>
@@ -879,8 +882,10 @@ const TransactionsDashboard = () => {
           </CardContent>
         </Card>
       </div>
+
     </div>
   );
 };
 
 export default TransactionsDashboard;
+

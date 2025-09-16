@@ -11,6 +11,7 @@ const endpoints = {
   GET_TRANSACTION_BY_SCHOOL: (school_id) => `/transactions/school/${school_id}`,
 
   GET_TRANSACTION_STATUS: (id) => `/payment/status/${id}`,
+
 };
 
 export default endpoints;

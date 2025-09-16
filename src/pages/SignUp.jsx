@@ -52,6 +52,7 @@ const SignUp = () => {
     }
 
     try {
+
       const resultAction = await dispatch(
         fetchUserSignUp({ signUp, signUpUser })
       );

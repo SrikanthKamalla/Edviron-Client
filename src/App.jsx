@@ -1,5 +1,6 @@
 import "./index.css";
 import { Routes, Route, Link } from "react-router-dom";
+
 import Dashboard from "./pages/Dashboard";
 import SchoolTransactions from "./pages/SchoolTransactions";
 import StatusCheck from "./pages/StatusCheck";
@@ -75,6 +76,7 @@ function App() {
         </Routes>
       </main>
     </div>
+
   );
 }
 

@@ -10,8 +10,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ const Login = () => {
 
     try {
       setIsLoading(true);
+
       const resultAction = await dispatch(
         fetchUserLogin({ login, loginUser: { email, password } })
       );
@@ -121,6 +122,7 @@ const Login = () => {
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? "Sign In..." : "Sign In"}
+
               </button>
               <p className="text-center text-sm text-gray-600">
                 Don't have an account?
@@ -139,6 +141,7 @@ const Login = () => {
             >
               Login with Sample Credentials
             </button>
+
           </form>
         </div>
       </div>
