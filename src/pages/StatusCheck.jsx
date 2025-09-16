@@ -9,12 +9,12 @@ import {
   Copy,
   ExternalLink,
 } from "lucide-react";
-import { apiService } from "../utils/api";
-import { mockSchools } from "../utils/mockData";
 import { format } from "date-fns";
+import { getTransactionStatus } from "../services/transactions";
 
 const CheckStatus = () => {
   const [orderId, setOrderId] = useState("");
+
   const [transaction, setTransaction] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,8 +32,9 @@ const CheckStatus = () => {
     setTransaction(null);
 
     try {
-      const result = await apiService.getTransactionStatus(orderId.trim());
-      setTransaction(result);
+      const result = await getTransactionStatus(orderId);
+      setTransaction(result.data.data);
+
     } catch (err) {
       setError(err.message || "Transaction not found");
       setTransaction(null);
@@ -68,18 +69,21 @@ const CheckStatus = () => {
     }
   };
 
-  const getSchoolName = (schoolId) => {
-    const school = mockSchools.find((s) => s._id === schoolId);
-    return school?.name || "Unknown School";
-  };
-
-  const copyToClipboard = (text, label) => {
+  const copyToClipboard = (text) => {
+    if (!text) return;
     navigator.clipboard.writeText(text);
-    alert(`${label} copied to clipboard`);
   };
 
-  // Sample order IDs for demo
-  const sampleOrderIds = ["ORD001", "ORD002", "ORD003", "ORD004", "ORD005"];
+  const formatAmount = (amount) => {
+    if (amount === null || amount === undefined) return "N/A";
+    return `₹${amount.toLocaleString("en-IN")}`;
+  };
+
+  const formatDate = (date) => {
+    if (!date) return "N/A";
+    return format(new Date(date), "PPpp");
+  };
+
 
   return (
     <div className="space-y-6">
@@ -92,7 +96,7 @@ const CheckStatus = () => {
         </p>
       </div>
 
-      {/* Search Form */}
+
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
@@ -113,7 +117,7 @@ const CheckStatus = () => {
             </label>
             <input
               id="orderId"
-              placeholder="Enter order ID (e.g., ORD001)"
+
               value={orderId}
               onChange={(e) => setOrderId(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
@@ -138,7 +142,7 @@ const CheckStatus = () => {
         </form>
       </div>
 
-      {/* Transaction Details */}
+
       {transaction && (
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="mb-6">
@@ -148,9 +152,8 @@ const CheckStatus = () => {
                   {getStatusIcon(transaction.status)}
                   Transaction Details
                 </h2>
-                <p className="text-gray-600 mt-1">
-                  Order ID: {transaction.custom_order_id}
-                </p>
+                <p className="text-gray-600 mt-1">Order ID: {orderId}</p>
+
               </div>
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(transaction.status)}`}
@@ -160,7 +163,7 @@ const CheckStatus = () => {
             </div>
           </div>
           <div className="space-y-6">
-            {/* Status Timeline */}
+
             <div className="space-y-4">
               <h3 className="font-semibold text-gray-900">Payment Status</h3>
               <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
@@ -169,18 +172,18 @@ const CheckStatus = () => {
                 </div>
                 <div className="flex-grow">
                   <div className="font-medium text-gray-900">
-                    {transaction.payment_message}
+                    {transaction.payment_message || "No payment message"}
                   </div>
-                  <div className="text-sm text-gray-600">
-                    {format(new Date(transaction.payment_time), "PPpp")}
-                  </div>
+                  {transaction.payment_time && (
+                    <div className="text-sm text-gray-600">
+                      {formatDate(transaction.payment_time)}
+                    </div>
+                  )}
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-lg text-gray-900">
-                    ₹{transaction.transaction_amount.toLocaleString("en-IN")}
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    via {transaction.gateway_name}
+                    {formatAmount(transaction.transaction_amount)}
+
                   </div>
                 </div>
               </div>
@@ -195,9 +198,8 @@ const CheckStatus = () => {
               )}
             </div>
 
-            {/* Transaction Information */}
             <div className="grid gap-6 md:grid-cols-2">
-              {/* Payment Details */}
+
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900">
                   Payment Information
@@ -206,7 +208,9 @@ const CheckStatus = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Order Amount</span>
                     <span className="font-medium text-gray-900">
-                      ₹{transaction.order_amount.toLocaleString("en-IN")}
+ 
+                      {formatAmount(transaction.amount)}
+
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -214,137 +218,45 @@ const CheckStatus = () => {
                       Transaction Amount
                     </span>
                     <span className="font-medium text-gray-900">
-                      ₹{transaction.transaction_amount.toLocaleString("en-IN")}
+                      {formatAmount(transaction.transaction_amount)}
+
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Payment Mode</span>
                     <span className="font-medium text-gray-900 capitalize">
-                      {transaction.payment_mode}
+                      {transaction.details.payment_mode || "N/A"}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Gateway</span>
-                    <span className="font-medium text-gray-900">
-                      {transaction.gateway_name}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">
-                      Bank Reference
-                    </span>
-                    <div className="flex items-center space-x-2">
-                      <span className="font-mono text-sm text-gray-900">
-                        {transaction.bank_reference}
+
+                  {transaction.details.bank_ref && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">
+                        Bank Reference
                       </span>
-                      <button
-                        className="text-gray-500 hover:text-gray-700"
-                        onClick={() =>
-                          copyToClipboard(
-                            transaction.bank_reference,
-                            "Bank reference"
-                          )
-                        }
-                      >
-                        <Copy className="h-4 w-4" />
-                      </button>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-mono text-sm text-gray-900">
+                          {transaction.details.bank_ref || "N/A"}
+                        </span>
+                        <button
+                          className="text-gray-500 hover:text-gray-700"
+                          onClick={() =>
+                            copyToClipboard(transaction.details.bank_ref)
+                          }
+                        >
+                          {transaction.details.bank_ref && (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                  )}
 
-              {/* Student & School Details */}
-              <div className="space-y-4">
-                <h3 className="font-semibold text-gray-900">
-                  Student & School Information
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <span className="text-sm text-gray-600 block">
-                      Student Name
-                    </span>
-                    <span className="font-medium text-gray-900">
-                      {transaction.student_info.name}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600 block">
-                      Student ID
-                    </span>
-                    <span className="font-mono text-sm text-gray-900">
-                      {transaction.student_info.id}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600 block">
-                      Student Email
-                    </span>
-                    <span className="text-sm text-gray-900">
-                      {transaction.student_info.email}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600 block">School</span>
-                    <span className="font-medium text-gray-900">
-                      {getSchoolName(transaction.school_id)}
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Technical Details */}
-            <div className="space-y-4">
-              <h3 className="font-semibold text-gray-900">Technical Details</h3>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Collect ID</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="font-mono text-sm text-gray-900">
-                      {transaction.collect_id}
-                    </span>
-                    <button
-                      className="text-gray-500 hover:text-gray-700"
-                      onClick={() =>
-                        copyToClipboard(transaction.collect_id, "Collect ID")
-                      }
-                    >
-                      <Copy className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">School ID</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="font-mono text-sm text-gray-900">
-                      {transaction.school_id}
-                    </span>
-                    <button
-                      className="text-gray-500 hover:text-gray-700"
-                      onClick={() =>
-                        copyToClipboard(transaction.school_id, "School ID")
-                      }
-                    >
-                      <Copy className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Payment Details</span>
-                  <span className="text-sm text-gray-900">
-                    {transaction.payment_details}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Payment Time</span>
-                  <span className="text-sm text-gray-900">
-                    {format(new Date(transaction.payment_time), "PPpp")}
-                  </span>
-                </div>
-              </div>
-            </div>
 
-            {/* Actions */}
             <div className="flex items-center space-x-4 pt-4 border-t border-gray-200">
               <button
                 className="border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-2 px-4 rounded-md"
@@ -356,18 +268,7 @@ const CheckStatus = () => {
               >
                 Search Another
               </button>
-              <button
-                className="border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-2 px-4 rounded-md flex items-center"
-                onClick={() =>
-                  copyToClipboard(
-                    JSON.stringify(transaction, null, 2),
-                    "Transaction data"
-                  )
-                }
-              >
-                <Copy className="h-4 w-4 mr-2" />
-                Copy Details
-              </button>
+
             </div>
           </div>
         </div>
