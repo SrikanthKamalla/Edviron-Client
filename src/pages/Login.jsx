@@ -10,6 +10,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -24,16 +26,7 @@ const Login = () => {
     }
 
     try {
-      /*
-      const response = await login({ email, password });
-      if (response.data.success) {
-        toast.success("SignUp successful! Welcome to EduPay Dashboard");
-        saveToLocalStorage(response.data.data.token);
-        navigate("/dashboard");
-      } else {
-        setError("Invalid email or password");
-      }
-    */
+      setIsLoading(true);
       const resultAction = await dispatch(
         fetchUserLogin({ login, loginUser: { email, password } })
       );
@@ -49,8 +42,14 @@ const Login = () => {
         toast.error(resultAction.payload?.message || "Login failed");
       }
     } catch (err) {
-      setError("An error occurred during login");
+      setError(err.message || "An error occurred during login");
     }
+  };
+
+  const addSampleCredentials = (e) => {
+    e.preventDefault();
+    setEmail(import.meta.env.VITE_SAMPLE_DATA);
+    setPassword(import.meta.env.VITE_SAMPLE_DATA);
   };
 
   return (
@@ -121,8 +120,7 @@ const Login = () => {
                 type="submit"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {/* {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} */}
-                Sign In
+                {isLoading ? "Sign In..." : "Sign In"}
               </button>
               <p className="text-center text-sm text-gray-600">
                 Don't have an account?
@@ -134,6 +132,13 @@ const Login = () => {
                 </a>
               </p>
             </div>
+
+            <button
+              onClick={addSampleCredentials}
+              className="m-auto mb-3 bg-blue-600 hover:bg-blue-700 text-white font-medium text-[10px] py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Login with Sample Credentials
+            </button>
           </form>
         </div>
       </div>

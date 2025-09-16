@@ -5,3 +5,5 @@ export const login = (payload) =>
   axiosBaseInstance.post(endpoints.USER_LOGIN, payload);
 export const signUp = (payload) =>
   axiosBaseInstance.post(endpoints.USER_SIGNUP, payload);
+
+export const getSchools = () => axiosBaseInstance.get(endpoints.GET_SCHOOLS);

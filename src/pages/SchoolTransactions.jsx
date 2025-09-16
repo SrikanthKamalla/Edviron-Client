@@ -7,10 +7,7 @@ import {
   Eye,
   RefreshCw,
 } from "lucide-react";
-import { apiService } from "../utils/api";
-import { getTransactionsBySchool } from "../utils/mockData";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import { toast } from "react-toastify";
 import {
   Badge,
@@ -30,71 +27,24 @@ import {
   TableHeader,
   TableRow,
 } from "../components/helpers";
+import { getSchools } from "../services/auth";
 
 const Schools = () => {
   const [schools, setSchools] = useState([]);
-  const [schoolStats, setSchoolStats] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedSchool, setSelectedSchool] = useState(null);
-  const [schoolTransactions, setSchoolTransactions] = useState([]);
 
   const loadSchools = async () => {
     try {
       setIsLoading(true);
-      const schoolsData = await apiService.getSchools();
-      setSchools(schoolsData);
 
-      // Calculate stats for each school
-      const stats = {};
-      for (const school of schoolsData) {
-        const transactions = getTransactionsBySchool(school._id);
-        const successfulTransactions = transactions.filter(
-          (t) => t.status === "SUCCESS"
-        );
-        const totalAmount = successfulTransactions.reduce(
-          (sum, t) => sum + t.transaction_amount,
-          0
-        );
+      const response = await getSchools();
+      const { data = [] } = response?.data || {};
 
-        stats[school._id] = {
-          totalTransactions: transactions.length,
-          successfulTransactions: successfulTransactions.length,
-          totalAmount,
-          successRate:
-            transactions.length > 0
-              ? (
-                  (successfulTransactions.length / transactions.length) *
-                  100
-                ).toFixed(1)
-              : "0",
-        };
-      }
-      setSchoolStats(stats);
+      setSchools(data);
     } catch (error) {
-      toast.error({
-        title: "Error",
-        description: "Failed to load schools data",
-        variant: "destructive",
-      });
+      toast.error("Failed to load schools data", error.message);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const loadSchoolTransactions = async (schoolId) => {
-    try {
-      const response = await apiService.getTransactionsBySchool(
-        schoolId,
-        1,
-        20
-      );
-      setSchoolTransactions(response.data);
-    } catch (error) {
-      toast.error({
-        title: "Error",
-        description: "Failed to load school transactions",
-        variant: "destructive",
-      });
     }
   };
 
@@ -133,7 +83,6 @@ const Schools = () => {
       {/* Schools Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {schools.map((school) => {
-          const stats = schoolStats[school._id] || {};
           return (
             <Card
               key={school._id}

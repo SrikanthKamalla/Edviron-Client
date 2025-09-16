@@ -52,15 +52,6 @@ const SignUp = () => {
     }
 
     try {
-      /* const response = await signUp(signUpUser);
-      if (response.data.success) {
-        toast.success("SignUp successful! Welcome to EduPay Dashboard");
-        saveToLocalStorage(response.data.data.token);
-        navigate("/dashboard");
-      } else {
-        setError("Invalid email or password");
-      }*/
-      console.log("signup");
       const resultAction = await dispatch(
         fetchUserSignUp({ signUp, signUpUser })
       );

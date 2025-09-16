@@ -6,33 +6,15 @@ import {
   Search,
   LogOut,
   Plus,
-  Moon,
-  Sun,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.user);
-
-  console.log({ user });
   const navigate = useNavigate();
   const location = useLocation();
-  const [isDark, setIsDark] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    const theme = localStorage.getItem("theme");
-    setIsDark(theme === "dark");
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = isDark ? "light" : "dark";
-    setIsDark(!isDark);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.classList.toggle("dark", !isDark);
-  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -107,17 +89,7 @@ const Navbar = () => {
                 </Link>
               </div>
 
-              <button
-                onClick={toggleTheme}
-                className="h-8 w-8 flex items-center justify-center rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              >
-                {isDark ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-              </button>
-
+              {/* User dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
