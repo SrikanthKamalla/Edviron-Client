@@ -33,8 +33,8 @@ const CheckStatus = () => {
 
     try {
       const result = await getTransactionStatus(orderId);
+      // console.log(result.data.data);
       setTransaction(result.data.data);
-
     } catch (err) {
       setError(err.message || "Transaction not found");
       setTransaction(null);
@@ -84,7 +84,6 @@ const CheckStatus = () => {
     return format(new Date(date), "PPpp");
   };
 
-
   return (
     <div className="space-y-6">
       <div>
@@ -95,7 +94,6 @@ const CheckStatus = () => {
           Enter an order ID to check the current status of a transaction
         </p>
       </div>
-
 
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="mb-6">
@@ -117,7 +115,6 @@ const CheckStatus = () => {
             </label>
             <input
               id="orderId"
-
               value={orderId}
               onChange={(e) => setOrderId(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
@@ -142,7 +139,6 @@ const CheckStatus = () => {
         </form>
       </div>
 
-
       {transaction && (
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="mb-6">
@@ -153,7 +149,6 @@ const CheckStatus = () => {
                   Transaction Details
                 </h2>
                 <p className="text-gray-600 mt-1">Order ID: {orderId}</p>
-
               </div>
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(transaction.status)}`}
@@ -163,7 +158,6 @@ const CheckStatus = () => {
             </div>
           </div>
           <div className="space-y-6">
-
             <div className="space-y-4">
               <h3 className="font-semibold text-gray-900">Payment Status</h3>
               <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
@@ -183,7 +177,6 @@ const CheckStatus = () => {
                 <div className="text-right">
                   <div className="font-bold text-lg text-gray-900">
                     {formatAmount(transaction.transaction_amount)}
-
                   </div>
                 </div>
               </div>
@@ -199,7 +192,6 @@ const CheckStatus = () => {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900">
                   Payment Information
@@ -208,9 +200,7 @@ const CheckStatus = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Order Amount</span>
                     <span className="font-medium text-gray-900">
- 
                       {formatAmount(transaction.amount)}
-
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -218,25 +208,24 @@ const CheckStatus = () => {
                       Transaction Amount
                     </span>
                     <span className="font-medium text-gray-900">
-                      {formatAmount(transaction.transaction_amount)}
-
+                      {formatAmount(transaction?.transaction_amount)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Payment Mode</span>
                     <span className="font-medium text-gray-900 capitalize">
-                      {transaction.details.payment_mode || "N/A"}
+                      {transaction?.details?.payment_mode || "N/A"}
                     </span>
                   </div>
 
-                  {transaction.details.bank_ref && (
+                  {transaction?.details?.bank_ref && (
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">
                         Bank Reference
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-mono text-sm text-gray-900">
-                          {transaction.details.bank_ref || "N/A"}
+                          {transaction?.details?.bank_ref || "N/A"}
                         </span>
                         <button
                           className="text-gray-500 hover:text-gray-700"
@@ -244,18 +233,16 @@ const CheckStatus = () => {
                             copyToClipboard(transaction.details.bank_ref)
                           }
                         >
-                          {transaction.details.bank_ref && (
+                          {transaction?.details?.bank_ref && (
                             <Copy className="h-4 w-4" />
                           )}
                         </button>
                       </div>
                     </div>
                   )}
-
                 </div>
               </div>
             </div>
-
 
             <div className="flex items-center space-x-4 pt-4 border-t border-gray-200">
               <button
@@ -268,7 +255,6 @@ const CheckStatus = () => {
               >
                 Search Another
               </button>
-
             </div>
           </div>
         </div>
