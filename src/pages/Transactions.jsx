@@ -96,22 +96,27 @@ const Transactions = () => {
                     </div>
                   )}
                 </td>
+
                 <td className="py-3 px-4 text-gray-900">
-                  {transaction?.payment_details || "N/A"}
+                  {transaction?.orderInfo.gateway_name || "N/A"}
                 </td>
+
                 <td className="py-3 px-4 text-gray-900 font-mono">
                   ₹{transaction.order_amount?.toLocaleString("en-IN") || "0"}
                 </td>
+
                 <td className="py-3 px-4 text-gray-900 font-mono">
                   ₹
                   {transaction.transaction_amount?.toLocaleString("en-IN") ||
                     "0"}
                 </td>
+
                 <td className="py-3 px-4">
                   <Badge variant={getStatusVariant(transaction.status)}>
                     {transaction.status}
                   </Badge>
                 </td>
+
                 <td className="py-3 px-4 text-sm">
                   <div className="text-gray-900">
                     {format(new Date(transaction.payment_time), "MMM dd, yyyy")}
