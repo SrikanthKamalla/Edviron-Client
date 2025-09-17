@@ -50,9 +50,7 @@ const Transactions = () => {
           <tr>
             <th className="py-3 px-4">S.No.</th>
             <th className="py-3 px-4">Collect ID</th>
-            {/* <th className="py-3 px-4">Order ID</th> */}
             <th className="py-3 px-4">Student</th>
-            <th className="py-3 px-4">School</th>
             <th className="py-3 px-4">Gateway</th>
             <th className="py-3 px-4">Order Amount</th>
             <th className="py-3 px-4">Transaction Amount</th>
@@ -87,19 +85,7 @@ const Transactions = () => {
                     )}
                   </div>
                 </td>
-                {/* <td className="font-mono text-sm py-3 px-4 text-gray-900">
-                  <div className="flex items-center gap-2">
-                    {transaction.custom_order_id}
-                    <button
-                      onClick={() =>
-                        copyToClipboard(transaction.custom_order_id)
-                      }
-                      className="p-1 hover:bg-gray-100 rounded"
-                    >
-                      <Copy className="h-3 w-3 text-gray-500" />
-                    </button>
-                  </div>
-                </td> */}
+
                 <td className="py-3 px-4">
                   <div className="font-medium text-gray-900">
                     {transaction?.orderInfo.student_info?.name || "N/A"}
@@ -109,11 +95,6 @@ const Transactions = () => {
                       {transaction.student_info.email}
                     </div>
                   )}
-                </td>
-                <td className="py-3 px-4 text-gray-900 font-medium">
-                  {transaction?.institutionName ||
-                    transaction?.school_id ||
-                    "Unknown School"}
                 </td>
                 <td className="py-3 px-4 text-gray-900">
                   {transaction?.payment_details || "N/A"}
