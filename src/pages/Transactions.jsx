@@ -18,8 +18,9 @@ const getStatusVariant = (status) => {
   }
 };
 
-const Transactions = ({ school }) => {
+const Transactions = () => {
   const location = useLocation();
+  const { state } = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
   const schoolId = searchParams.get("school");
@@ -41,7 +42,9 @@ const Transactions = ({ school }) => {
 
   return (
     <div className="overflow-x-auto rounded-xl shadow-md">
-      <h1>{school}</h1>
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white my-4 ">
+        {state?.name}
+      </h1>
       <table className="min-w-full border-collapse bg-white dark:bg-gray-900">
         <thead className="bg-gray-100 dark:bg-gray-800 text-left">
           <tr>
@@ -141,7 +144,6 @@ const Transactions = ({ school }) => {
           )}
         </tbody>
       </table>
-
     </div>
   );
 };

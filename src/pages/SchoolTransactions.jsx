@@ -44,7 +44,6 @@ const Schools = () => {
       setSchools(data);
     } catch (error) {
       toast.error("Failed to load schools data", error.message);
-
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +84,6 @@ const Schools = () => {
       {/* Schools Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {schools.map((school) => {
-
           return (
             <Card
               key={school._id}
@@ -111,6 +109,7 @@ const Schools = () => {
                 <div className="flex space-x-2 pt-2">
                   <Link
                     to={`/transactions?school=${school._id}`}
+                    state={{ name: school.name }}
                     className="flex-1"
                   >
                     <Button variant="outline" size="sm" className="w-full">
