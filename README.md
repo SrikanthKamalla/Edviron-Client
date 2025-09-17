@@ -1,4 +1,5 @@
-# EduPay Server 
+# EduPay 
+<a href="https://edviron-client-mu.vercel.app/">Live Demo</a>
 ## School Fee Payment Management System
 
 EduPay is a web application designed to simplify school fee management and transactions between institutions, trustees, students, and parents. It provides an easy-to-use interface for tracking transactions, viewing payment history, and managing users securely.
